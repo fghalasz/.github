@@ -21,6 +21,10 @@ inputs:
   workflow:
     description: "the workflow using the sentry"
     required: true
+  tag:
+    description: "tag that can distinguish this sentry from other sentries in same workflow"
+    required: false
+    default: "untagged"
 outputs:
   release_not_built:
     description: "Set to 'true' is a release with this commit has not been built"
@@ -33,7 +37,7 @@ runs:
       with:
         workflow: ${{ inputs.workflow }}
         search_artifacts: true
-        name: sentry-${{ github.sha }}
+        name: sentry-${{ inputs.tag }}-${{ github.sha }}
         path: ../sentry
     - id: output
       if: ${{ always() }}
